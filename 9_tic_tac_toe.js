@@ -3,20 +3,20 @@ var playField = document.getElementById('play_field'),
     smallField = 3,
     winerSymb;
 
-function arrToMatrix(arr, smallField) {
+function arrToMatrix(arr, sizeOfField) {
     var rezArr = [],
         v = 0;
     
-    for(i = 0; i < smallField; i++){
+    for(i = 0; i < sizeOfField; i++){
         rezArr[i] = [];
-        for(var j = 0; j < smallField; j++){
+        for(var j = 0; j < sizeOfField; j++){
         rezArr[i][j] = arr[v++];
         }
     }
     return rezArr;
 };
 
-elemsMatrix = arrToMatrix(arr, 3, 3);
+elemsMatrix = arrToMatrix(arr, smallField);
 
 function isLine(symb) {
     var cols,
@@ -84,9 +84,11 @@ function checkWin() {
 }
 
 function finishTheGame() {
+    current = true;
     if (checkWin()) {
         for (i = 0; i < arr.length; i++) {
             arr[i].innerHTML = "";
+            arr[i].classList.remove('null');
         }
     }
 }
@@ -96,10 +98,11 @@ function insertSymbols() {
     return function (e) {
         if (e.target.className == 'col' && e.target.innerHTML != 'x' && e.target.innerHTML != '0') {
             if (current) {
-                e.target.innerHTML = 'x'; 
+                e.target.innerHTML = 'x';
                 current = false;
             } else {
                 e.target.innerHTML = '0';
+                e.target.classList.add('null');
                 current = true;
             }
             finishTheGame();
@@ -110,5 +113,3 @@ function insertSymbols() {
 
 
 playField.addEventListener('click', insertSymbols());
-
-console.log(elemsMatrix[0][0].innerHTML);
