@@ -1,9 +1,11 @@
 ;(function () {
+    
     var rebuildButton = $('[data-button=rebuildButton]'),
         cleanButton = $('[data-button=clean]'),
         field = $('[data-name=field]'),
         matrixArrOfCells = [],
         stackOfElements = [],
+        stackOfclass = [],
         statusOfGame = true,
         countOfRows = 3,
         countOfCols = 3,
@@ -32,8 +34,13 @@
                     matrixArrOfCells[i][j] = colsTemplate.tmpl().appendTo(createdRows[i]);
                 }
             }
-            console.log(matrixArrOfCells);
+            resumeElement();
          } else alert("Введіть числа");
+    }
+    
+    function resumeElement() {
+        stackOfElements = JSON.parse(localStorage.getItem('elementSet')) || [];
+        console.log(stackOfElements);
     }
     
     function isNumeric(n) {
@@ -46,6 +53,7 @@
         if (target.hasClass('value') && !target.hasClass('cross') && !target.hasClass('null')) {
             if (statusOfGame) {
                 target.addClass('cross');
+                stackOfclass.push('cross')
                 target.text('x');
                 statusOfGame = false;
             } else {
@@ -54,8 +62,11 @@
                 statusOfGame = true;
             }
             stackOfElements.push(target);
+//            dddd
+            console.log(stackOfElements);
+            localStorage.setItem('elementSet', JSON.stringify(stackOfElements));
+            finishTheGame();
         }
-        checkWin();
     };
     
     function clean() {
@@ -129,6 +140,19 @@
         }
     
         return false;
+    }
+    
+    function finishTheGame() {
+        if (checkWin()) {
+            statusOfGame = true;
+            
+            for (i = 0; i < stackOfElements.length; i++) {
+                stackOfElements[i].text('');
+                stackOfElements[i].removeClass('null cross');
+            }
+            
+            statusArr = [];
+        }
     }
 
     
