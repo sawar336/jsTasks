@@ -7,21 +7,23 @@
     smallField = 3,
     winerSymb,
     statusArr = [];
+    
+    
 
-    function arrToMatrix(arr, sizeOfField) {
-        var rezArr = [],
-            v = 0;
-
-        for(i = 0; i < sizeOfField; i++){
-            rezArr[i] = [];
-            for(var j = 0; j < sizeOfField; j++){
-            rezArr[i][j] = arr[v++];
-            }
-        }
-        return rezArr;
-    };
-
-    elemsMatrix = arrToMatrix(arr, smallField);
+//    function arrToMatrix(arr, sizeOfField) {
+//        var rezArr = [],
+//            v = 0;
+//
+//        for(i = 0; i < sizeOfField; i++){
+//            rezArr[i] = [];
+//            for(var j = 0; j < sizeOfField; j++){
+//            rezArr[i][j] = arr[v++];
+//            }
+//        }
+//        return rezArr;
+//    };
+//
+//    elemsMatrix = arrToMatrix(arr, smallField);
 
     function isLine(symb) {
         var cols,
@@ -121,13 +123,13 @@
         }
     };
     
-    function clen() {
-        var lastItem = statusArr[statusArr.length - 1];
-        lastItem.innerHTML = "";
-        lastItem.classList.remove('null');
-        lastItem.classList.remove('cross');
-        statusArr.pop();
-    }
+//    function clen() {
+//        var lastItem = statusArr[statusArr.length - 1];
+//        lastItem.innerHTML = "";
+//        lastItem.classList.remove('null');
+//        lastItem.classList.remove('cross');
+//        statusArr.pop();
+//    }
     
     function saveStatus() {
         

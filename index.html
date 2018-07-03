@@ -29,23 +29,31 @@
 <div id="result">Result: <span>0</span></div>
 
 <div class="betwen"></div>
-<div id="play_field">
-    <div class="col"></div>
-    <div class="col"></div>
-    <div class="col"></div>
-    <div class="col"></div>
-    <div class="col"></div>
-    <div class="col"></div>
-    <div class="col"></div>
-    <div class="col"></div>
-    <div class="col"></div>
+
+<div id="play_field" data-name='field'>
+    
 </div>
 
-<input type="submit" id = "clean" value="Очистить">
-<input type="text" id = "x_size" placeholder="x">
-<input type="text" id = "y_size" placeholder="y">
+<div action="" class="wraper">
+    <input type="submit" id = "clean" data-button="clean" value="Очистить">
+    <input type="text" placeholder="Rows" data-fieldSize="xSize" class="size" value="3">
+    <input type="text" placeholder="Cols" data-fieldSize="ySize" class="size" value="3">
+    <input type="submit" value="Rebuild" data-button="rebuildButton">
+</div>
+
+<script id="tmpl" type="text/x-jquery-tmpl" data-name='tmpl'>
+    <div class="cell">
+        <div class="value"></div>
+    </div>
+</script>
+<script id="tmplRow" type="text/x-jquery-tmpl" data-name='tmplRow'>
+    <div class="row">
+        
+    </div>
+</script>
 
 <script src="jquery/jQuery.min.js"></script>
+<script src="jquery/jquery.tmpl.js"></script>
 
 <!--    <script src="1_factorial.js"> </script>-->
 <!--    <script src="2_fibonachi.js"> </script>-->
@@ -55,7 +63,9 @@
 <!--    <script src="6_bind_context/context.js"> </script>-->
 <!--    <script src="7_ajax.js"></script>-->
 <!--    <script src="8_select.js"></script>-->
-    <script src="9_tic_tac_toe.js"></script>
+<!--    <script src="9_tic_tac_toe.js"></script>-->
+    <script src="9_tic_tac_toe_2.js"></script>
 <!--<script src="try.js"></script>-->
+
 </body>
 </html>
