@@ -60,6 +60,7 @@
                 target.text('0');
                 statusOfGame = true;
             }
+            stackOfElements.push(target);
             finishTheGame();
         }
     };
@@ -93,21 +94,60 @@
     };
     
     function isDiagonal(elementClass) {
-        var rightD = 1,
-            leftD = 1;
-
-        for (el = 0; el < smallField; el++) {
-            rightD &= (matrixArrOfCells[el][el].children().hasClass(elementClass));
-            leftD &= (matrixArrOfCells[el][smallField - el - 1].children().hasClass(elementClass));
+        var rightD = 0,
+            leftD = 0,
+            result;
+        
+        if(countOfRows <= countOfCols) {
+            for(i = 0; i < (countOfCols - 2); i++) { 
+                for(j = 0; j < countOfRows; j++) {
+                    if  (matrixArrOfCells[j][j + i].children().hasClass(elementClass)) {
+                        rightD++;
+                        if (rightD == 3) {
+                            winerSymb = elementClass;
+                            return true;
+                        }
+                    } 
+                    
+                    if (matrixArrOfCells[j][countOfRows - j - 1 + i].children().hasClass(elementClass)) {
+                        leftD++;
+                        if (leftD == 3) {
+                            winerSymb = elementClass;
+                            return true;
+                        }
+                    }
+                }
+                
+                rightD = 0;
+                leftD = 0;
+            }
+        } else {
+            for(i = 0; i < (countOfRows - 2); i++) { 
+                for(j = 0; j < countOfCols; j++) {
+                    if  (matrixArrOfCells[j + i][j].children().hasClass(elementClass)) {
+                        rightD++;
+                        if (rightD == 3) {
+                            winerSymb = elementClass;
+                            return true;
+                        }
+                    } 
+                    
+                    if (matrixArrOfCells[countOfCols - j - 1 + i][j].children().hasClass(elementClass)) {
+                        leftD++;
+                        if (leftD == 3) {
+                            winerSymb = elementClass;
+                            return true;
+                        } 
+                    }
+                
+                }
+                rightD = 0;
+                leftD = 0;
+            }
         }
-
-        if (rightD || leftD) {
-            winerSymb = elementClass;
-            return true;
-        } 
-
         return false;
     };
+    
     
     function isADraw() {
         var elem = 1;
@@ -141,10 +181,10 @@
         if (checkWin()) {
             statusOfGame = true;
             
-            for (i = 0; i < stackOfElements.length; i++) {
-                stackOfElements[i].text('');
-                stackOfElements[i].removeClass('null cross');
-            }
+//            for (i = 0; i < stackOfElements.length; i++) {
+//                stackOfElements[i].text('');
+//                stackOfElements[i].removeClass('null cross');
+//            }
             
             statusArr = [];
         }
