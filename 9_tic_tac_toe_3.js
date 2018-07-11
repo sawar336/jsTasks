@@ -10,7 +10,9 @@
         countOfRows = 3,
         countOfCols = 3,
         winerSymb,
-        smallField = 3;
+        smallField = 3,
+        succsess = 0;
+                            
     
     function createField() {
         var rowsTemplate = $('[data-name=tmplRow]'),
@@ -94,60 +96,77 @@
     };
     
     function isDiagonal(elementClass) {
-        var rightD = 0,
-            leftD = 0,
-            result;
         
-        if(countOfRows <= countOfCols) {
-            for(i = 0; i < (countOfCols - 2); i++) { 
+        function isRightDiagonals() {
+            var firstResult,
+                secondResult;
+            
+
+            for(i = 0; i <= (countOfCols - 3); i++) { 
                 for(j = 0; j < countOfRows; j++) {
-                    if  (matrixArrOfCells[j][j + i].children().hasClass(elementClass)) {
-                        rightD++;
-                        if (rightD == 3) {
-                            winerSymb = elementClass;
-                            return true;
-                        }
-                    } 
-                    
-                    if (matrixArrOfCells[j][countOfRows - j - 1 + i].children().hasClass(elementClass)) {
-                        leftD++;
-                        if (leftD == 3) {
-                            winerSymb = elementClass;
-                            return true;
-                        }
-                    }
+                    firstResult = hasClass(matrixArrOfCells, i, j);
                 }
-                
-                rightD = 0;
-                leftD = 0;
-            }
-        } else {
-            for(i = 0; i < (countOfRows - 2); i++) { 
-                for(j = 0; j < countOfCols; j++) {
-                    if  (matrixArrOfCells[j + i][j].children().hasClass(elementClass)) {
-                        rightD++;
-                        if (rightD == 3) {
-                            winerSymb = elementClass;
-                            return true;
-                        }
-                    } 
-                    
-                    if (matrixArrOfCells[countOfCols - j - 1 + i][j].children().hasClass(elementClass)) {
-                        leftD++;
-                        if (leftD == 3) {
-                            winerSymb = elementClass;
-                            return true;
-                        } 
-                    }
-                
+            };
+            for(i = 1; i <= countOfRows - 3; i++) { 
+                var p = i;
+                for(j = 0; j < countOfRows; j++) {
+                    secondResult = hasClass(matrixArrOfCells, i, j);
                 }
-                rightD = 0;
-                leftD = 0;
-            }
-        }
-        return false;
+            }; 
+
+            if  (firstResult || secondResult) {
+                return true;
+            };
+
+        };
+
+        function hasClass(arr, counter1, counter2) {
+            var p;
+            if( arr[counter2][counter2 + counter1].children().hasClass(elementClass) ) {
+                succsess++;
+            } else {
+                succsess = 0;
+            };  
+
+            return p = (succsess == 3);
+        };
+        
+        return isRightDiagonals();
     };
-    
+//    function isDiagonal(elementClass) {
+//        
+//        function isRightDiagonals() {
+//            var firstResult = 0,
+//                secondResult = 0;
+//
+//            for(i = 0; i <= (countOfCols - 3); i++) { 
+//                for(j = 0; j < countOfRows; j++) {
+//                    if( !isNaN(arr[j][j + i]) && arr[j][j + i].children().hasClass(elementClass) ) {
+//                        firstResult++;
+//                        if (firstResult == 3) {
+//                            return true;
+//                        }
+//                    } else {
+//                        firstResult = 0;
+//                    }
+//                }
+//            };
+//            for(i = 1; i <= countOfRows - 3; i++) { 
+//                var p = i;
+//                for(j = 0; j < countOfRows; j++) {
+//                    if( !isNaN(arr[j][j + i]) && arr[j][j + i].children().hasClass(elementClass) ) {
+//                succsess += 1;
+//            }
+//                }
+//            }; 
+//            
+//            if (firstResult == 3 || secondResult == 3) {
+//                return true;
+//            }
+//        };
+//        
+//        return isRightDiagonals();
+//    };
     
     function isADraw() {
         var elem = 1;
