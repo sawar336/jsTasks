@@ -1,4 +1,4 @@
-;(function () {
+//;(function () {
     
     var rebuildButton = $('[data-button=rebuildButton]'),
         cleanButton = $('[data-button=clean]'),
@@ -7,11 +7,11 @@
         stackOfElements = [],
         stackOfclass = [],
         statusOfGame = true,
-        countOfRows = 3,
-        countOfCols = 3,
+        countOfRows,
+        countOfCols,
         winerSymb,
-        smallField = 3,
-        succsess = 0;
+        succsess;
+        winnerCombination = [];
                             
     
     function createField() {
@@ -19,8 +19,8 @@
             colsTemplate = $('[data-name=tmpl]'),
             createdRows;
         
-        countOfRows = $('[data-fieldSize=xSize')[0].value;
-        countOfCols = $('[data-fieldSize=ySize]')[0].value;
+        countOfRows = $('[data-fieldSize=xSize')[0].value || 3;
+        countOfCols = $('[data-fieldSize=ySize]')[0].value || 3;
         
         if(countOfRows < 3 || countOfRows < 3)  {
             alert('числа не можуть бути менші за 3');
@@ -68,112 +68,98 @@
     };
     
     function clean() {
-        var lastItem = stackOfElements[stackOfElements.length - 1];
-        lastItem.removeClass('null cross')
-        lastItem.text('');
-        stackOfElements.pop();
-        statusOfGame = !statusOfGame;
-    }
+        if (stackOfElements.length != 0) {
+            var lastItem = stackOfElements[stackOfElements.length - 1];
+            lastItem.removeClass('null cross winnerCombination')
+            lastItem.text('');
+            winnerCombination.pop();
+            toHightlight();
+            stackOfElements.pop();
+            statusOfGame = !statusOfGame; 
+        };
+    };
     
     function isLine(elementClass) {
-        var cols,
-            rows;
-
-        for(row = 0; row < smallField; row++) {
-            cols = 1;
-            rows = 1;
-            for (col = 0; col < smallField; col++) {
-                cols &= (matrixArrOfCells[col][row].children().hasClass(elementClass));
-                rows &= (matrixArrOfCells[row][col].children().hasClass(elementClass));
+        
+        for(col = 0; col < countOfCols; col++) {
+            succsess = 0;
+            for (row = 0; row < countOfRows; row++) {
+                if(hasClass(matrixArrOfCells, row, col, elementClass)) return true;
             }
-            if (cols || rows) {
-                winerSymb = elementClass;
-                return true;
-            } 
         }
+        for(row = 0; row < countOfRows; row++) {
+            succsess = 0;
+            for (col = 0; col < countOfCols; col++) {
+                if(hasClass(matrixArrOfCells, row, col, elementClass)) return true; 
+            }
+        };
+
 
         return false;
     };
-    
+
     function isDiagonal(elementClass) {
         
-        function isRightDiagonals() {
-            var firstResult,
-                secondResult;
-            
-
-            for(i = 0; i <= (countOfCols - 3); i++) { 
-                for(j = 0; j < countOfRows; j++) {
-                    firstResult = hasClass(matrixArrOfCells, i, j);
-                }
+//        all diagonals over main diagonal
+        for(i = 0; i <= (countOfCols - 3); i++) { 
+            succsess = 0;
+            winnerCombination = [];
+            for(j = 0; j < countOfRows; j++) {
+                if( hasClass(matrixArrOfCells, j, (j + i), elementClass) ) return true;
             };
-            for(i = 1; i <= countOfRows - 3; i++) { 
-                var p = i;
-                for(j = 0; j < countOfRows; j++) {
-                    secondResult = hasClass(matrixArrOfCells, i, j);
-                }
-            }; 
-
-            if  (firstResult || secondResult) {
-                return true;
-            };
-
         };
-
-        function hasClass(arr, counter1, counter2) {
-            var p;
-            if( arr[counter2][counter2 + counter1].children().hasClass(elementClass) ) {
-                succsess++;
-            } else {
-                succsess = 0;
-            };  
-
-            return p = (succsess == 3);
+//        all diagonals under main diagonal
+        for(i = 1; i <= countOfRows - 3; i++) { 
+            succsess = 0;
+            winnerCombination = [];
+            for(j = 0; j < countOfRows; j++) {
+                if( hasClass(matrixArrOfCells, j, (j - i), elementClass) ) return true;
+            };
+        };
+//        all diagonals over anti-diagonal
+        for(i = 1; i <= (countOfCols - 3); i++) { 
+            succsess = 0;
+            winnerCombination = [];
+            for(j = 0; j < countOfRows; j++) {
+                if( hasClass(matrixArrOfCells, j, (countOfCols - j - 1 - i), elementClass) ) return true;
+            };
+        };  
+//        all diagonals under anti-diagonal        
+        for(i = 0; i <= (countOfRows - 3); i++) { 
+            succsess = 0;
+            winnerCombination = [];
+            for(j = 0; j < countOfRows; j++) {
+                if( hasClass(matrixArrOfCells, j, (countOfCols - j - 1 + i), elementClass) ) return true;
+            };
         };
         
-        return isRightDiagonals();
+        return false;
     };
-//    function isDiagonal(elementClass) {
-//        
-//        function isRightDiagonals() {
-//            var firstResult = 0,
-//                secondResult = 0;
-//
-//            for(i = 0; i <= (countOfCols - 3); i++) { 
-//                for(j = 0; j < countOfRows; j++) {
-//                    if( !isNaN(arr[j][j + i]) && arr[j][j + i].children().hasClass(elementClass) ) {
-//                        firstResult++;
-//                        if (firstResult == 3) {
-//                            return true;
-//                        }
-//                    } else {
-//                        firstResult = 0;
-//                    }
-//                }
-//            };
-//            for(i = 1; i <= countOfRows - 3; i++) { 
-//                var p = i;
-//                for(j = 0; j < countOfRows; j++) {
-//                    if( !isNaN(arr[j][j + i]) && arr[j][j + i].children().hasClass(elementClass) ) {
-//                succsess += 1;
-//            }
-//                }
-//            }; 
-//            
-//            if (firstResult == 3 || secondResult == 3) {
-//                return true;
-//            }
-//        };
-//        
-//        return isRightDiagonals();
-//    };
+
+    function hasClass(arr, firstValue, secondValue, elementClass) {
+        if( arr[firstValue][secondValue] && arr[firstValue][secondValue].children().hasClass(elementClass) ) {
+            winnerCombination.push([firstValue, secondValue]);
+            succsess++;
+            if(succsess == 3) {
+                toHightlight();
+                winerSymb = elementClass;
+                return true;
+            };
+        } else {
+            succsess = 0;
+            winnerCombination = [];      
+        };
+        
+        return false;
+    };
+
     
     function isADraw() {
         var elem = 1;
 
-        for(col = 0; col < smallField; col++) {
-            for (row = 0; row < smallField; row++) {
-                elem &= (matrixArrOfCells[col][row].children().text() !== '');
+        for(row = 0; row < countOfRows; row++) {
+            for (col = 0; col < countOfCols; col++) {
+                elem &= (matrixArrOfCells[row][col].children().text() !== '');
             } 
         }
         if (elem) {
@@ -198,8 +184,7 @@
     
     function finishTheGame() {
         if (checkWin()) {
-            statusOfGame = true;
-            
+//            statusOfGame = true;
 //            for (i = 0; i < stackOfElements.length; i++) {
 //                stackOfElements[i].text('');
 //                stackOfElements[i].removeClass('null cross');
@@ -208,10 +193,22 @@
             statusArr = [];
         }
     }
-
+    
+    function toHightlight() {
+        
+        if (winnerCombination.length < 3) {
+           for(i = 0; i <= winnerCombination.length - 1; i++) {
+                matrixArrOfCells[winnerCombination[i][0]][winnerCombination[i][1]].children().removeClass('winnerCombination');
+            }; 
+        } else {
+            for(i = 0; i < winnerCombination.length; i++) {
+                matrixArrOfCells[winnerCombination[i][0]][winnerCombination[i][1]].children().addClass('winnerCombination');
+            };  
+        };
+    };
     
     field.on('click', insertSymbols);
     rebuildButton.on('click', createField);
     cleanButton.on('click', clean);
     createField();
-})();
+//})();

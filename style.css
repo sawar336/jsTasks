@@ -17,9 +17,10 @@
     line-height: 50px;
     border: 1px solid #000;
     background-color: green;
-    color: #6d1e1e;
+    color: green;
     font-family: sans-serif;
     cursor: pointer;
+    transition: all 1s;
 }
 
 .value {
@@ -39,6 +40,19 @@
 
 .null {
     color: #263cb9;
+    transition: all 0.7s;
+}
+
+.cross {
+    color: #6d1e1e;
+    transition: all 0.7s;
+} 
+
+.winnerCombination {
+    color: #ebe542;
+    background-color: #000;
+    box-shadow: inset 0px 0px 20px 3px #ebe542;
+    transition: all 1s;
 }
 
 .wraper {
@@ -54,4 +68,11 @@ input {
     display: inline-block;
     padding-left: 15px;
     margin: 20px 0 10px 0;
+}
+
+.test {
+    background-color: aquamarine;
+}
+.test2 {
+    background-color: coral;
 }

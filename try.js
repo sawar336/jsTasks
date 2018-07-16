@@ -47,36 +47,36 @@ console.log(matrixArr);
         console.log(sum);
         sum = 0;
     } 
-    for(i = 0; i <= (rows - 3); i++) { 
-        var p = i;
-        for(j = 0; j < rows; j++) {
-            var n = j;
-            if(!isNaN(matrixArr[j][cols - j - 1 + i])) {
-                sum += matrixArr[j][cols - j - 1 + i];   
-            }; 
-               
-            if(matrixArr[j][cols - j - 1 + i]) {
-                matrixArr[j][cols - j - 1 + i] += "-" + i;   
-            };
-        }
-        console.log(sum);
-        sum = 0;
-    }
-    for(i = 1; i <= (cols - 3); i++) { 
-        var p = i;
-        for(j = 0; j < cols; j++) {
-            var n = j;
-            if(!isNaN(matrixArr[j][cols - j -1 - i])) {
-                sum += matrixArr[j][cols - j -1 - i];   
-            }; 
-               
-            if(matrixArr[j][cols - j -1 - i]) {
-                matrixArr[j][cols - j -1 - i] += "+" + i;   
-            };
-        }
-        console.log(sum);
-        sum = 0;
-    }
+//    for(i = 0; i <= (rows - 3); i++) { 
+//        var p = i;
+//        for(j = 0; j < rows; j++) {
+//            var n = j;
+//            if(!isNaN(matrixArr[j][cols - j - 1 + i])) {
+//                sum += matrixArr[j][cols - j - 1 + i];   
+//            }; 
+//               
+//            if(matrixArr[j][cols - j - 1 + i]) {
+//                matrixArr[j][cols - j - 1 + i] += "-" + i;   
+//            };
+//        }
+//        console.log(sum);
+//        sum = 0;
+//    }
+//    for(i = 1; i <= (cols - 3); i++) { 
+//        var p = i;
+//        for(j = 0; j < cols; j++) {
+//            var n = j;
+//            if(!isNaN(matrixArr[j][cols - j -1 - i])) {
+//                sum += matrixArr[j][cols - j -1 - i];   
+//            }; 
+//               
+//            if(matrixArr[j][cols - j -1 - i]) {
+//                matrixArr[j][cols - j -1 - i] += "+" + i;   
+//            };
+//        }
+//        console.log(sum);
+//        sum = 0;
+//    }
 })();
 
 
