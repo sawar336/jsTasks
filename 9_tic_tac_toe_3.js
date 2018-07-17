@@ -4,25 +4,36 @@
         cleanButton = $('[data-button=clean]'),
         field = $('[data-name=field]'),
         matrixArrOfCells = [],
+        matrixOfSimbol = [],
         stackOfElements = [],
         stackOfclass = [],
         statusOfGame = true,
-        countOfRows,
-        countOfCols,
-        winerSymb,
-        succsess;
+        countOfRows = localStorage.getItem('rows'),
+        countOfCols = localStorage.getItem('cols'),
+        winerSymb ,
+        succsess,
         winnerCombination = [];
-                            
-    
+
     function createField() {
         var rowsTemplate = $('[data-name=tmplRow]'),
             colsTemplate = $('[data-name=tmpl]'),
             createdRows;
+            
+        countOfRows = $('[data-fieldSize=xSize')[0].value;
+        countOfCols = $('[data-fieldSize=ySize')[0].value;
         
-        countOfRows = $('[data-fieldSize=xSize')[0].value || 3;
-        countOfCols = $('[data-fieldSize=ySize]')[0].value || 3;
         
-        if(countOfRows < 3 || countOfRows < 3)  {
+        
+        if(countOfRows != '' && countOfCols != '') {
+            localStorage.setItem('rows', countOfRows);
+            localStorage.setItem('cols', countOfCols);
+        } else {
+            countOfRows = localStorage.getItem('rows');
+            countOfCols = localStorage.getItem('cols');
+        }
+            
+        
+        if(countOfRows < 3 || countOfCols < 3)  {
             alert('числа не можуть бути менші за 3');
         } else if( isNumeric(countOfRows) && isNumeric(countOfCols)) {
             field.empty();
@@ -32,21 +43,69 @@
                 createdRows = $('.row');
                 
                 matrixArrOfCells[i] = [];
+                matrixOfSimbol[i] = []
                 for(j = 0; j < countOfCols; j++) {
-                    matrixArrOfCells[i][j] = colsTemplate.tmpl().appendTo(createdRows[i]);
+                    matrixArrOfCells[i][j] = {
+                        el: colsTemplate.tmpl().appendTo(createdRows[i]),
+                        row: i,
+                        col: j
+                    };
+                    matrixOfSimbol[i][j] = 'label';
                 }
             }
          } else alert("Введіть числа");
-    }
+    };
+
+    function checkSimbols() {
+        for(i = 0; i < countOfRows; i++) {
+            for (j = 0; j < countOfCols; j++) {
+                if (matrixArrOfCells[i][j].el.children().hasClass('null')) {
+                    matrixOfSimbol[i][j] = 0;
+                } else if(matrixArrOfCells[i][j].el.children().hasClass('cross')) {
+                    matrixOfSimbol[i][j] = 1;
+                } else {
+                     matrixOfSimbol[i][j] = 'label';
+                }
+                
+                localStorage.setItem('elemsValue', JSON.stringify(matrixOfSimbol));
+            }
+        }
+    };
+
+    function createStack() {
+        for(i = 0; i < countOfRows; i++) {
+            for (j = 0; j < countOfCols; j++) {
+                if (matrixArrOfCells[i][j].el.children().hasClass('null') || matrixArrOfCells[i][j].el.children().hasClass('cross')) {
+                    stackOfElements.push([matrixArrOfCells[i][j].row, matrixArrOfCells[i][j].col]);
+                } 
+//                localStorage.setItem('elemsValue', JSON.stringify(stackOfElements));
+            }
+        }
+    };
     
-//    function resumeElement() {
-//        stackOfElements = JSON.parse(localStorage.getItem('elementSet')) || [];
-//        console.log(stackOfElements);
-//    }
+    function afterReload() {
+        matrixOfSimbol = JSON.parse(localStorage.getItem('elemsValue'));
+        
+        for(i = 0; i < countOfRows; i++) {
+            for (j = 0; j < countOfCols; j++) {
+                if (matrixOfSimbol[i][j] == 0) {
+                    matrixArrOfCells[i][j].el.children().addClass('null');
+                    matrixArrOfCells[i][j].el.children().text('0');
+                } else if(matrixOfSimbol[i][j] == 1) {
+                    matrixArrOfCells[i][j].el.children().addClass('cross');
+                    matrixArrOfCells[i][j].el.children().text('x');
+                } else {
+                     matrixArrOfCells[i][j].el.children().text('');
+                }
+                
+//                localStorage.setItem('elemsValue', JSON.stringify(matrixOfSimbol));
+            }
+        }
+    };
     
     function isNumeric(n) {
       return !isNaN(parseFloat(n)) && isFinite(n);
-    }
+    };
     
     function insertSymbols(e) {
         var target = $(e.target);
@@ -62,20 +121,22 @@
                 target.text('0');
                 statusOfGame = true;
             }
-            stackOfElements.push(target);
+            checkSimbols();
+            createStack();
             finishTheGame();
         }
     };
     
     function clean() {
         if (stackOfElements.length != 0) {
-            var lastItem = stackOfElements[stackOfElements.length - 1];
+            var lastItem = matrixArrOfCells[(stackOfElements.length - 1), 0][(stackOfElements.length - 1), 1];
             lastItem.removeClass('null cross winnerCombination')
             lastItem.text('');
             winnerCombination.pop();
             toHightlight();
             stackOfElements.pop();
             statusOfGame = !statusOfGame; 
+            checkSimbols();
         };
     };
     
@@ -137,7 +198,7 @@
     };
 
     function hasClass(arr, firstValue, secondValue, elementClass) {
-        if( arr[firstValue][secondValue] && arr[firstValue][secondValue].children().hasClass(elementClass) ) {
+        if( typeof(arr[firstValue][secondValue]) === 'object' && arr[firstValue][secondValue].el.children().hasClass(elementClass) ) {
             winnerCombination.push([firstValue, secondValue]);
             succsess++;
             if(succsess == 3) {
@@ -147,7 +208,7 @@
             };
         } else {
             succsess = 0;
-            winnerCombination = [];      
+            winnerCombination = [];
         };
         
         return false;
@@ -159,7 +220,7 @@
 
         for(row = 0; row < countOfRows; row++) {
             for (col = 0; col < countOfCols; col++) {
-                elem &= (matrixArrOfCells[row][col].children().text() !== '');
+                elem &= (matrixArrOfCells[row][col].el.children().text() !== '');
             } 
         }
         if (elem) {
@@ -198,11 +259,11 @@
         
         if (winnerCombination.length < 3) {
            for(i = 0; i <= winnerCombination.length - 1; i++) {
-                matrixArrOfCells[winnerCombination[i][0]][winnerCombination[i][1]].children().removeClass('winnerCombination');
+                matrixArrOfCells[winnerCombination[i][0]][winnerCombination[i][1]].el.children().removeClass('winnerCombination');
             }; 
         } else {
             for(i = 0; i < winnerCombination.length; i++) {
-                matrixArrOfCells[winnerCombination[i][0]][winnerCombination[i][1]].children().addClass('winnerCombination');
+                matrixArrOfCells[winnerCombination[i][0]][winnerCombination[i][1]].el.children().addClass('winnerCombination');
             };  
         };
     };
@@ -211,4 +272,6 @@
     rebuildButton.on('click', createField);
     cleanButton.on('click', clean);
     createField();
+//    checkSimbols();
+    afterReload();
 //})();

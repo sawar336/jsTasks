@@ -1,4 +1,5 @@
-function TTT() {
+//;(function () {
+    function TTT() {
         this.rebuildButton = $('[data-button=rebuildButton]');
         this.cleanButton = $('[data-button=clean]');
         this.field = $('[data-name=field]');
@@ -13,11 +14,7 @@ function TTT() {
         this.succsess;
         this.winnerCombination = [];
         
-        this.isNumeric = function isNumeric(n) {
-            return !isNaN(parseFloat(n)) && isFinite(n);
-        };
-        
-        this.createField = function createField() {
+        this.createField = function() {
             var rowsTemplate = $('[data-name=tmplRow]'),
                 colsTemplate = $('[data-name=tmpl]'),
                 createdRows;
@@ -59,7 +56,7 @@ function TTT() {
              } else alert("Введіть числа");
         };
         
-        this.checkSimbols = function checkSimbols() {
+        this.checkSimbols = function() {
             for(i = 0; i < this.countOfRows; i++) {
                 for (j = 0; j < this.countOfCols; j++) {
                     if (this.matrixArrOfCells[i][j].el.children().hasClass('null')) {
@@ -75,7 +72,7 @@ function TTT() {
             }
         };
         
-        this.createStack = function createStack() {
+        this.createStack = function() {
             for(i = 0; i < this.countOfRows; i++) {
                 for (j = 0; j < this.countOfCols; j++) {
                     if (this.matrixArrOfCells[i][j].el.children().hasClass('null') || this.matrixArrOfCells[i][j].el.children().hasClass('cross')) {
@@ -86,7 +83,7 @@ function TTT() {
             }
         };
         
-        this.afterReload = function afterReload() {
+        this.afterReload = function() {
             this.matrixOfSimbol = JSON.parse(localStorage.getItem('elemsValue'));
         
             for(i = 0; i < this.countOfRows; i++) {
@@ -105,13 +102,18 @@ function TTT() {
                 }
             }
         };
-    
-        this.insertSymbols = function insertSymbols(e) {
+        
+        this.isNumeric = function(n) {
+            return !isNaN(parseFloat(n)) && isFinite(n);
+        };
+        
+        this.insertSymbols = function(e) {
         var target = $(e.target);
         
             if (target.hasClass('value') && !target.hasClass('cross') && !target.hasClass('null')) {
                 if (this.statusOfGame) {
                     target.addClass('cross');
+                    this.stackOfclass.push('cross')
                     target.text('x');
                     this.statusOfGame = false;
                 } else {
@@ -119,13 +121,13 @@ function TTT() {
                     target.text('0');
                     this.statusOfGame = true;
                 }
-                this.checkSimbols();
-                this.createStack();
-                this.finishTheGame();
+                this.checkSimbols;
+                this.createStack;
+                this.finishTheGame;
             }
         };
-//        
-    this.clean = function clean() {
+        
+        this.clean = function() {
         if (this.stackOfElements.length != 0) {
             var lastItem = this.matrixArrOfCells[(this.stackOfElements.length - 1), 0][(this.stackOfElements.length - 1), 1];
             lastItem.removeClass('null cross winnerCombination')
@@ -138,7 +140,7 @@ function TTT() {
         };
     };
     
-    this.isLine = function isLine(elementClass) {
+    this.isLine = function(elementClass) {
         
         for(col = 0; col < this.countOfCols; col++) {
             this.succsess = 0;
@@ -157,7 +159,7 @@ function TTT() {
         return false;
     };
 
-    this.isDiagonal = function isDiagonal(elementClass) {
+    this.isDiagonal = function(elementClass) {
         
 //        all diagonals over main diagonal
         for(i = 0; i <= (this.countOfCols - 3); i++) { 
@@ -195,7 +197,7 @@ function TTT() {
         return false;
     };
 
-    this.hasClass = function hasClass(arr, firstValue, secondValue, elementClass) {
+    this.hasClass = function(arr, firstValue, secondValue, elementClass) {
         if( typeof(arr[firstValue][secondValue]) === 'object' && arr[firstValue][secondValue].el.children().hasClass(elementClass) ) {
             this.winnerCombination.push([firstValue, secondValue]);
             this.succsess++;
@@ -213,7 +215,7 @@ function TTT() {
     };
 
     
-    this.isADraw = function isADraw() {
+    this.isADraw = function() {
         var elem = 1;
 
         for(row = 0; row < this.countOfRows; row++) {
@@ -228,7 +230,7 @@ function TTT() {
         return false;
     };
     
-    this.checkWin = function checkWin() {
+    this.checkWin = function() {
         if (this.isLine('cross') || this.isLine('null') || this.isDiagonal('cross') || this.isDiagonal('null')) {
             alert('winer: ' + winerSymb);
             return true;
@@ -241,7 +243,7 @@ function TTT() {
         return false;
     };
     
-    this.finishTheGame = function finishTheGame() {
+    this.finishTheGame = function() {
         if (this.checkWin()) {
 //            statusOfGame = true;
 //            for (i = 0; i < stackOfElements.length; i++) {
@@ -253,7 +255,7 @@ function TTT() {
         }
     };
     
-    this.toHightlight = function toHightlight() {
+    this.toHightlight = function() {
         
         if (this.winnerCombination.length < 3) {
            for(i = 0; i <= this.winnerCombination.length - 1; i++) {
@@ -275,3 +277,5 @@ ttt.field.on('click', ttt.insertSymbols);
 ttt.rebuildButton.on('click', ttt.createField);
 ttt.cleanButton.on('click', ttt.clean);
 ttt.createField();
+//    checkSimbols();
+//ttt.afterReload();
