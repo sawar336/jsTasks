@@ -1,3 +1,14 @@
+#play_field {
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-bottom: 30px;
+}
+
 .betwen {
     height: 5px;
     background-color: #000;
@@ -5,11 +16,7 @@
 }
 
 .row {
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flex;
-    display: -o-flex;
-    display: flex;
+    display: block;
 }
 
 .cell {
@@ -38,15 +45,29 @@
     align-items: center;
 }
 
+.value:hover {
+    box-shadow: inset 0px 0px 20px 3px #ebe542, 
+                0px 0px 20px 0px #ebe542;
+    transition: all 0.1s;
+}
+
 .null {
     color: #263cb9;
     transition: all 0.7s;
+}
+
+.null:hover {
+    box-shadow: inset 0px 0px 20px 3px green;
 }
 
 .cross {
     color: #6d1e1e;
     transition: all 0.7s;
 } 
+
+.cross:hover {
+    box-shadow: inset 0px 0px 20px 3px green;
+}
 
 .winnerCombination {
     color: #ebe542;
